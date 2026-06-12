@@ -1,55 +1,51 @@
 import {
- View,
- Text,
- StyleSheet
+  View,
+  Text,
+  StyleSheet,
 } from "react-native";
 
-export default function AppointmentCard({appointment}) {
+export default function AppointmentCard({
+  appointment,
+}) {
+  return (
+    <View style={styles.card}>
+      <Text style={styles.doctor}>
+        {appointment.doctor}
+      </Text>
 
- return(
-  <View style={styles.card}>
+      <Text>
+        📅 {appointment.date}
+      </Text>
 
-   <Text style={styles.name}>
-     {appointment.doctor}
-   </Text>
+      <Text>
+        🕐 {appointment.time}
+      </Text>
 
-   <Text>
-     📅 {appointment.date}
-   </Text>
-
-   <Text>
-     🕐 {appointment.time}
-   </Text>
-
-   <Text style={styles.status}>
-     {appointment.status}
-   </Text>
-
-  </View>
- )
+      <Text style={styles.status}>
+        {appointment.status}
+      </Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    marginTop: 12,
+    elevation: 4,
+  },
 
- card:{
-  backgroundColor:"#fff",
-  borderRadius:20,
-  padding:20,
-  marginBottom:15,
+  doctor: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 8,
+  },
 
-  elevation:5
- },
-
- name:{
-  fontWeight:"700",
-  fontSize:18,
-  marginBottom:8
- },
-
- status:{
-  marginTop:10,
-  color:"#22C55E",
-  fontWeight:"700"
- }
-
+  status: {
+    marginTop: 10,
+    color: "#22C55E",
+    fontWeight: "700",
+  },
 });

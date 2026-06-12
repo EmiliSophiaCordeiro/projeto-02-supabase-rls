@@ -1,3 +1,4 @@
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -15,7 +16,6 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShadowVisible:false,
           headerStyle:{
             backgroundColor:"#2563EB"
           },
@@ -54,7 +54,6 @@ export default function AppNavigator() {
           name="Profile"
           component={ProfileScreen}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
