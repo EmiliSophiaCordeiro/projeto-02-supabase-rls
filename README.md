@@ -1,1 +1,0 @@
-# projeto-02-supabase-rls
