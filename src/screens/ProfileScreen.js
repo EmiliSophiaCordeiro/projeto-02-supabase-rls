@@ -1,124 +1,92 @@
-import { useEffect, useState } from 'react';
+import React from "react";
 import {
-  View,
-  Text,
-  Button,
-  StyleSheet
-} from 'react-native';
+ View,
+ Text,
+ StyleSheet,
+ TouchableOpacity
+} from "react-native";
 
-import { supabase } from '../services/supabase';
+export default function ProfileScreen(){
 
-export default function ProfileScreen({ navigation }) {
+ return(
+  <View style={styles.container}>
 
-  const [profile, setProfile] = useState(null);
-  const [email, setEmail] = useState('');
+   <View style={styles.avatar}>
+    <Text style={styles.avatarText}>
+      S
+    </Text>
+   </View>
 
-  async function carregarPerfil() {
+   <Text style={styles.name}>
+    Sophia Cordeiro
+   </Text>
 
-    const user =
-      (await supabase.auth.getUser())
-      .data.user;
+   <Text style={styles.email}>
+    sophia@email.com
+   </Text>
 
-    if (!user) return;
+   <TouchableOpacity style={styles.button}>
+    <Text style={styles.buttonText}>
+      Editar Perfil
+    </Text>
+   </TouchableOpacity>
 
-    setEmail(user.email);
+   <TouchableOpacity
+    style={styles.logout}
+   >
+    <Text style={styles.buttonText}>
+      Sair
+    </Text>
+   </TouchableOpacity>
 
-    const { data, error } =
-      await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-    if (!error) {
-      setProfile(data);
-    }
-  }
-
-  async function logout() {
-
-    await supabase.auth.signOut();
-
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' }]
-    });
-  }
-
-  useEffect(() => {
-    carregarPerfil();
-  }, []);
-
-  return (
-    <View style={styles.container}>
-
-      <Text style={styles.title}>
-        Meu Perfil
-      </Text>
-
-      <View style={styles.card}>
-
-        <Text style={styles.label}>
-          Nome:
-        </Text>
-
-        <Text style={styles.value}>
-          {profile?.nome}
-        </Text>
-
-        <Text style={styles.label}>
-          Email:
-        </Text>
-
-        <Text style={styles.value}>
-          {email}
-        </Text>
-
-        <Text style={styles.label}>
-          Tipo:
-        </Text>
-
-        <Text style={styles.value}>
-          {profile?.role}
-        </Text>
-
-      </View>
-
-      <Button
-        title="Sair"
-        onPress={logout}
-      />
-
-    </View>
-  );
+  </View>
+ )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20
-  },
-
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center'
-  },
-
-  card: {
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 20
-  },
-
-  label: {
-    fontWeight: 'bold',
-    marginTop: 10
-  },
-
-  value: {
-    fontSize: 16
-  }
+ container:{
+  flex:1,
+  alignItems:"center",
+  justifyContent:"center"
+ },
+ avatar:{
+  width:120,
+  height:120,
+  borderRadius:60,
+  backgroundColor:"#2563EB",
+  justifyContent:"center",
+  alignItems:"center"
+ },
+ avatarText:{
+  color:"#fff",
+  fontSize:40,
+  fontWeight:"bold"
+ },
+ name:{
+  fontSize:24,
+  fontWeight:"700",
+  marginTop:20
+ },
+ email:{
+  color:"#64748B"
+ },
+ button:{
+  marginTop:25,
+  backgroundColor:"#2563EB",
+  padding:15,
+  width:"80%",
+  borderRadius:14
+ },
+ logout:{
+  marginTop:15,
+  backgroundColor:"#EF4444",
+  padding:15,
+  width:"80%",
+  borderRadius:14
+ },
+ buttonText:{
+  color:"#fff",
+  textAlign:"center",
+  fontWeight:"700"
+ }
 });

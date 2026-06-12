@@ -1,52 +1,88 @@
-import { useEffect,useState } from 'react';
+import React from "react";
 import {
-  View,
-  Text,
-  FlatList
-} from 'react-native';
+ View,
+ Text,
+ FlatList,
+ StyleSheet
+} from "react-native";
 
-import { supabase } from '../services/supabase';
+const consultas = [
+ {
+  id:"1",
+  medico:"Dr. Carlos",
+  data:"20/06/2026",
+  status:"Agendada"
+ }
+];
 
-export default function PatientDashboard() {
+export default function PatientDashboard(){
 
-  const [consultas,setConsultas] =
-    useState([]);
+ return(
+  <View style={styles.container}>
 
-  async function carregar() {
+   <Text style={styles.title}>
+    Minhas Consultas
+   </Text>
 
-    const user =
-      (await supabase.auth.getUser())
-      .data.user;
+   <View style={styles.statsContainer}>
 
-    const { data } =
-      await supabase
-      .from('consultas')
-      .select('*')
-      .eq('paciente_id',user.id);
+    <View style={styles.statCard}>
+      <Text style={styles.number}>5</Text>
+      <Text>Agendadas</Text>
+    </View>
 
-    setConsultas(data || []);
-  }
+    <View style={styles.statCard}>
+      <Text style={styles.number}>12</Text>
+      <Text>Concluídas</Text>
+    </View>
 
-  useEffect(()=>{
-    carregar();
-  },[]);
+   </View>
 
-  return (
-    <FlatList
-      data={consultas}
-      keyExtractor={item=>item.id}
-      renderItem={({item})=>(
-        <View
-          style={{
-            borderWidth:1,
-            margin:10,
-            padding:10
-          }}
-        >
-          <Text>{item.status}</Text>
-          <Text>{item.sintomas}</Text>
-        </View>
-      )}
-    />
-  );
+   <FlatList
+    data={consultas}
+    renderItem={({item})=>(
+      <View style={styles.card}>
+       <Text>{item.medico}</Text>
+       <Text>{item.data}</Text>
+       <Text>{item.status}</Text>
+      </View>
+    )}
+   />
+
+  </View>
+ )
 }
+
+const styles = StyleSheet.create({
+ container:{
+  flex:1,
+  padding:20
+ },
+ title:{
+  fontSize:28,
+  fontWeight:"700"
+ },
+ statsContainer:{
+  flexDirection:"row",
+  gap:10,
+  marginVertical:20
+ },
+ statCard:{
+  flex:1,
+  backgroundColor:"#fff",
+  padding:20,
+  borderRadius:18,
+  elevation:4
+ },
+ number:{
+  fontSize:28,
+  fontWeight:"bold"
+ },
+ card:{
+  backgroundColor:"#fff",
+  padding:20,
+  borderRadius:18,
+  marginBottom:12,
+  elevation:3
+ }
+});

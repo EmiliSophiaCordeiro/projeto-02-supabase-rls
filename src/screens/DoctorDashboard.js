@@ -1,87 +1,110 @@
-import { useEffect,useState } from 'react';
+import React from "react";
 import {
-  View,
-  Text,
-  FlatList,
-  Button
-} from 'react-native';
+ View,
+ Text,
+ FlatList,
+ TouchableOpacity,
+ StyleSheet
+} from "react-native";
 
-import { supabase } from '../services/supabase';
+export default function DoctorDashboard(){
 
-export default function DoctorDashboard({navigation}) {
-
-  const [consultas,setConsultas] =
-    useState([]);
-
-  async function carregar() {
-
-    const { data } =
-      await supabase
-      .from('consultas')
-      .select('*')
-      .order('created_at');
-
-    setConsultas(data || []);
+ const consultas = [
+  {
+   id:"1",
+   paciente:"Sophia",
+   sintomas:"Dor de cabeça"
   }
+ ];
 
-  useEffect(()=>{
+ return(
+  <View style={styles.container}>
 
-    carregar();
+   <Text style={styles.title}>
+    Consultas Pendentes
+   </Text>
 
-    const channel =
-      supabase
-      .channel('consultas')
-      .on(
-        'postgres_changes',
-        {
-          event:'*',
-          schema:'public',
-          table:'consultas'
-        },
-        carregar
-      )
-      .subscribe();
+   <FlatList
+    data={consultas}
+    renderItem={({item})=>(
+      <View style={styles.card}>
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+       <Text style={styles.name}>
+        {item.paciente}
+       </Text>
 
-  },[]);
+       <Text>
+        {item.sintomas}
+       </Text>
 
-  return (
-    <View style={{flex:1,padding:20}}>
+       <View style={styles.buttons}>
 
-      <Button
-        title="Nova Consulta"
-        onPress={() =>
-          navigation.navigate(
-            'NovaConsulta'
-          )
-        }
-      />
+        <TouchableOpacity
+         style={styles.confirm}
+        >
+         <Text style={styles.btnText}>
+          Confirmar
+         </Text>
+        </TouchableOpacity>
 
-      <FlatList
-        data={consultas}
-        keyExtractor={item=>item.id}
-        renderItem={({item})=>(
-          <View
-            style={{
-              borderWidth:1,
-              padding:10,
-              marginTop:10
-            }}
-          >
-            <Text>
-              {item.status}
-            </Text>
+        <TouchableOpacity
+         style={styles.cancel}
+        >
+         <Text style={styles.btnText}>
+          Cancelar
+         </Text>
+        </TouchableOpacity>
 
-            <Text>
-              {item.sintomas}
-            </Text>
-          </View>
-        )}
-      />
+       </View>
 
-    </View>
-  );
+      </View>
+    )}
+   />
+
+  </View>
+ )
 }
+
+const styles = StyleSheet.create({
+ container:{
+  flex:1,
+  padding:20
+ },
+ title:{
+  fontSize:28,
+  fontWeight:"700"
+ },
+ card:{
+  backgroundColor:"#fff",
+  padding:20,
+  borderRadius:20,
+  marginTop:15
+ },
+ name:{
+  fontWeight:"700",
+  fontSize:18
+ },
+ buttons:{
+  flexDirection:"row",
+  marginTop:15
+ },
+ confirm:{
+  flex:1,
+  backgroundColor:"#22C55E",
+  padding:12,
+  borderRadius:12,
+  marginRight:5
+ },
+ cancel:{
+  flex:1,
+  backgroundColor:"#EF4444",
+  padding:12,
+  borderRadius:12,
+  marginLeft:5
+ },
+ btnText:{
+  color:"#fff",
+  textAlign:"center",
+  fontWeight:"700"
+ }
+});

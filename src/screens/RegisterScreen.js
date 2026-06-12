@@ -1,78 +1,44 @@
-import { useState } from 'react';
+import React from "react";
 import {
-  View,
-  TextInput,
-  Button
-} from 'react-native';
+ SafeAreaView,
+ ScrollView,
+ Text,
+ StyleSheet
+} from "react-native";
 
-import { supabase } from '../services/supabase';
+import CustomInput from "../components/CustomInput";
+import CustomButton from "../components/CustomButton";
 
-export default function RegisterScreen() {
+export default function RegisterScreen(){
 
-  const [nome,setNome] = useState('');
-  const [email,setEmail] = useState('');
-  const [senha,setSenha] = useState('');
+ return(
+  <SafeAreaView style={styles.container}>
+   <ScrollView>
 
-  async function cadastrar(role) {
+    <Text style={styles.title}>
+      Criar Conta
+    </Text>
 
-    const { data,error } =
-      await supabase.auth.signUp({
-        email,
-        password:senha
-      });
+    <CustomInput placeholder="Nome Completo"/>
+    <CustomInput placeholder="E-mail"/>
+    <CustomInput placeholder="Senha"/>
+    <CustomInput placeholder="Confirmar Senha"/>
 
-    if(error){
-      alert(error.message);
-      return;
-    }
+    <CustomButton title="Cadastrar"/>
 
-    await supabase
-      .from('profiles')
-      .insert({
-        id:data.user.id,
-        nome,
-        role
-      });
-
-    alert('Usuário criado');
-  }
-
-  return (
-    <View style={{padding:20}}>
-
-      <TextInput
-        placeholder="Nome"
-        value={nome}
-        onChangeText={setNome}
-      />
-
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-
-      <TextInput
-        placeholder="Senha"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
-
-      <Button
-        title="Cadastrar Médico"
-        onPress={() =>
-          cadastrar('medico')
-        }
-      />
-
-      <Button
-        title="Cadastrar Paciente"
-        onPress={() =>
-          cadastrar('paciente')
-        }
-      />
-
-    </View>
-  );
+   </ScrollView>
+  </SafeAreaView>
+ )
 }
+
+const styles=StyleSheet.create({
+ container:{
+  flex:1,
+  padding:20
+ },
+ title:{
+  fontSize:28,
+  fontWeight:"700",
+  marginBottom:20
+ }
+})

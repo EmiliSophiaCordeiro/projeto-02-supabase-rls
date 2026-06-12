@@ -1,48 +1,61 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
-import DoctorDashboard from '../screens/DoctorDashboard';
-import PatientDashboard from '../screens/PatientDashboard';
-import CreateAppointment from '../screens/CreateAppointment';
-import ProfileScreen from '../screens/ProfileScreen';
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import PatientDashboard from "../screens/PatientDashboard";
+import DoctorDashboard from "../screens/DoctorDashboard";
+import CreateAppointment from "../screens/CreateAppointment";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShadowVisible:false,
+          headerStyle:{
+            backgroundColor:"#2563EB"
+          },
+          headerTintColor:"#fff",
+          headerTitleStyle:{
+            fontWeight:"700"
+          }
+        }}
+      >
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+        />
 
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-      />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+        />
 
-      <Stack.Screen
-        name="Cadastro"
-        component={RegisterScreen}
-      />
+        <Stack.Screen
+          name="PatientDashboard"
+          component={PatientDashboard}
+        />
 
-      <Stack.Screen
-        name="Medico"
-        component={DoctorDashboard}
-      />
+        <Stack.Screen
+          name="DoctorDashboard"
+          component={DoctorDashboard}
+        />
 
-      <Stack.Screen
-        name="Paciente"
-        component={PatientDashboard}
-      />
+        <Stack.Screen
+          name="CreateAppointment"
+          component={CreateAppointment}
+        />
 
-      <Stack.Screen
-        name="NovaConsulta"
-        component={CreateAppointment}
-      />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+        />
 
-      <Stack.Screen
-        name="Perfil"
-        component={ProfileScreen}
-      />
-
-    </Stack.Navigator>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

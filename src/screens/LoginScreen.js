@@ -1,92 +1,88 @@
-import { useState } from 'react';
+import React, { useState } from "react";
 import {
-  View,
-  TextInput,
-  Button,
-  StyleSheet
-} from 'react-native';
+ View,
+ Text,
+ StyleSheet,
+ SafeAreaView
+} from "react-native";
 
-import { supabase } from '../services/supabase';
+import CustomInput from "../components/CustomInput";
+import CustomButton from "../components/CustomButton";
+import { COLORS } from "../constants/colors";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
 
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
+ const [email,setEmail] = useState("");
+ const [password,setPassword] = useState("");
 
-  async function login() {
+ return(
+  <SafeAreaView style={styles.container}>
 
-    const { error } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+   <View style={styles.header}>
+    <Text style={styles.logo}>🏥 MedCare</Text>
+    <Text style={styles.subtitle}>
+      Gestão Inteligente de Consultas
+    </Text>
+   </View>
 
-    if(error){
-      alert(error.message);
-      return;
-    }
+   <View style={styles.card}>
 
-    const user =
-      (await supabase.auth.getUser())
-      .data.user;
+    <Text style={styles.title}>
+      Entrar
+    </Text>
 
-    const { data } =
-      await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id',user.id)
-      .single();
+    <CustomInput
+      placeholder="E-mail"
+      value={email}
+      onChangeText={setEmail}
+    />
 
-    if(data.role === 'medico'){
-      navigation.replace('Medico');
-    }else{
-      navigation.replace('Paciente');
-    }
-  }
+    <CustomInput
+      placeholder="Senha"
+      secureTextEntry
+      value={password}
+      onChangeText={setPassword}
+    />
 
-  return (
-    <View style={styles.container}>
+    <CustomButton
+      title="Entrar"
+    />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
+   </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      <Button
-        title="Entrar"
-        onPress={login}
-      />
-
-      <Button
-        title="Cadastrar"
-        onPress={() =>
-          navigation.navigate('Cadastro')
-        }
-      />
-
-    </View>
-  );
+  </SafeAreaView>
+ )
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    justifyContent:'center',
-    padding:20
-  },
-  input:{
-    borderWidth:1,
-    marginBottom:10,
-    padding:10
-  }
+ container:{
+  flex:1,
+  backgroundColor:COLORS.background,
+  justifyContent:"center",
+  padding:20
+ },
+ header:{
+  alignItems:"center",
+  marginBottom:40
+ },
+ logo:{
+  fontSize:34,
+  fontWeight:"bold",
+  color:COLORS.primary
+ },
+ subtitle:{
+  color:COLORS.subtitle,
+  marginTop:5
+ },
+ card:{
+  backgroundColor:"#fff",
+  padding:25,
+  borderRadius:25,
+  elevation:8
+ },
+ title:{
+  fontSize:26,
+  fontWeight:"700",
+  marginBottom:20
+ }
 });
